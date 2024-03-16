@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "692040490101",
+    "project_id": "philippine-currency-identifier",
+    "storage_bucket": "philippine-currency-identifier.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692040490101:android:3d1252895a3923dc57ec3c",
+        "android_client_info": {
+          "package_name": "com.jaydeeballaho.philippinecurrencyidentifier"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXlClLTIc8yt1S1P1D4MXy-EaAVz14ftM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

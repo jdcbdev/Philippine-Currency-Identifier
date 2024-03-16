@@ -1,4 +1,4 @@
-package com.example.philippinecurrencyidentifier
+package com.jaydeeballaho.philippinecurrencyidentifier
 
 import org.junit.Test
 

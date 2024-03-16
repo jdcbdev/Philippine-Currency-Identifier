@@ -1,30 +1,30 @@
-package com.example.philippinecurrencyidentifier
-
-// Camera Library
-// Text to Speech library
-// Import of machine learning model files
-// TensorFlow Library
+package com.jaydeeballaho.philippinecurrencyidentifier
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.SurfaceTexture
+
+// Camera Library
 import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
+import android.hardware.camera2.CameraCharacteristics
+
+
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Vibrator
+
+// Text to Speech library
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.util.Size
+
+
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.Surface
@@ -37,19 +37,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.example.philippinecurrencyidentifier.ml.Coin
-import com.example.philippinecurrencyidentifier.ml.DetectMetadata
-import com.example.philippinecurrencyidentifier.ml.Paper
-import com.example.philippinecurrencyidentifier.ml.Validator
+
+// Import of machine learning model files
+import com.jaydeeballaho.philippinecurrencyidentifier.ml.DetectMetadata
+import com.jaydeeballaho.philippinecurrencyidentifier.ml.Coin
+import com.jaydeeballaho.philippinecurrencyidentifier.ml.Paper
+import com.jaydeeballaho.philippinecurrencyidentifier.ml.Validator
+
+// TensorFlow Library
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.label.Category
+
 import java.text.DecimalFormat
 import java.util.Locale
 import java.util.Timer
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
+import android.util.Size
 
 class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     TextToSpeech.OnInitListener {
@@ -125,10 +132,6 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     lateinit var cvTestBitmap : ImageView
     lateinit var imageTest: Bitmap
     var runOnceTest = false
-
-    var colorNormal = Color.argb(255, 255, 255, 200)
-    var colorInvalid = Color.argb(255, 255, 200, 200)
-    var colorValid = Color.argb(255, 153, 255, 153)
 
     // ---------
     companion object {
@@ -276,6 +279,7 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                             }
 
                             // Runs validation model whether the currency is valid or not
+
                             var imageClassification = TensorImage.fromBitmap(bitmap)
                             imageClassification = imageProcessorImage.process(imageClassification)
 
@@ -301,6 +305,7 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                                     // Log.d("predict", ": $label ${item.score}")
 
                                     if(label == "money" && score > 0.9 && score <= 1.0) {
+                                        // Log.d("predict", ": tite")
                                         predictedCategory = label
                                         break
                                     } else {
@@ -315,17 +320,25 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
 
                                 when (predictedCategory) {
                                     "invalid" -> {
-                                        announceMessage("Unrecognizable, try again.", "farAway")
+                                        announceMessage("Doubtful Bill, try again.", "farAway")
                                         return@Thread
                                     }
                                     "foreign" -> {
                                         announceMessage("Detected foreign money. Try again", "farAway")
                                         return@Thread
                                     }
+//                                    "money" -> {
+//                                        isObjectDetected = false
+//                                        shouldThreadRun = true
+//                                        isThreadReturned = true
+//
+//                                        return@Thread
+//                                    }
                                 }
                             }
 
                             // To run PAPER or Coin model
+
                             var paperOutput: Paper.Outputs? = null
                             var coinOutput: Coin.Outputs? = null
                             var probability: Array<Category>? = null
@@ -338,10 +351,10 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                             } else {
                                 coinOutput = coinModel.process(imageClassification)
                                 probability = coinOutput.probabilityAsCategoryList.toTypedArray()
+
                             }
 
                             var imageClassifierSuccess = false
-
 
                             for (item in probability) {
                                 // label and scoring
@@ -373,12 +386,7 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                                     pauseAudio()
 
                                     // ------ Changes the UI when money is detected
-                                    // Change background based on android version
-                                    if (Build.VERSION.SDK_INT >= 30) {
-                                        scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradrient_detectedmoney)
-                                    } else {
-                                        scanLayout.setBackgroundColor(colorValid);
-                                    }
+                                    scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradrient_detectedmoney)
 
                                     var billVersion = ""
 
@@ -453,17 +461,13 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                                         // ------ Stops the loop
                                     }
                                     else {
-                                        // Change background based on android version
-                                        if (Build.VERSION.SDK_INT >= 30) {
-                                            scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient_invalid)
-                                        } else {
-                                            scanLayout.setBackgroundColor(colorInvalid);
-                                        }
+                                        // Changes the UI to original
+                                        scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient_invalid)
 
                                         if (label == "cointail") {
                                             ttsMessage = "Flip the coin that you are currently holding."
                                         } else {
-                                            ttsMessage = "Detected invalid currency. Please try again."
+                                            ttsMessage = "Detected doubtful currency. Please try again."
                                         }
 
                                         val params = Bundle()
@@ -476,12 +480,7 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                                                 shouldThreadRun = true
                                                 playAudio()
 
-                                                // Change background based on android version
-                                                if (Build.VERSION.SDK_INT >= 30) {
-                                                    scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient)
-                                                } else {
-                                                    scanLayout.setBackgroundColor(colorNormal);
-                                                }
+                                                scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient)
                                             }
 
                                             override fun onError(utteranceId: String?) {
@@ -540,17 +539,7 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
 
     // Function to handle the common operations for speaking text and updating UI.
     private fun announceMessage(ttsMessage: String, uniqueId: String) {
-
-//        Log.d("tite", Build.VERSION.SDK_INT.toString())
-//        Log.d("tite", Build.VERSION_CODES.JELLY_BEAN.toString())
-
-        // Change background based on android version
-        if (Build.VERSION.SDK_INT >= 30) {
-            scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient_invalid)
-        } else {
-            scanLayout.setBackgroundColor(colorInvalid);
-        }
-
+        scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient_invalid)
         vibrator.vibrate(300) // Quick vibration
         pauseAudio() // Stops the scanning audio
 
@@ -564,13 +553,7 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                 shouldThreadRun = true
                 isThreadReturned = true
                 playAudio()
-
-                // Change background based on android version
-                if (Build.VERSION.SDK_INT >= 30) {
-                    scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient)
-                } else {
-                    scanLayout.setBackgroundColor(colorNormal);
-                }
+                scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient)
             }
 
             override fun onError(utteranceId: String?) {}
@@ -815,12 +798,7 @@ class ScanActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                         tvScanResult.text = "0"
 
                         // Changes the UI to original
-                        // Change background based on android version
-                        if (Build.VERSION.SDK_INT >= 30) {
-                            scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient)
-                        } else {
-                            scanLayout.setBackgroundColor(colorNormal);
-                        }
+                        scanLayout.background = ContextCompat.getDrawable(this@ScanActivity, R.drawable.bg_gradient)
                     }
                 }
             }
