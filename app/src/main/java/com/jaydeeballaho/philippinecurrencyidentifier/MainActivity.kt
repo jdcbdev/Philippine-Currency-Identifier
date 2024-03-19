@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val continueBtn = findViewById<Button>(R.id.btnContinue)
         val termsMessage = getString(R.string.app_terms_conditions);
 
-        val speechMessage = "Welcome to Philippine Currency Identifier. $termsMessage"
+        val speechMessage = "Welcome to Cash Hear - A Philippine Currency Identifier. $termsMessage"
         val uniqueId = "welcoming"
 
         // Check if the license has expired
