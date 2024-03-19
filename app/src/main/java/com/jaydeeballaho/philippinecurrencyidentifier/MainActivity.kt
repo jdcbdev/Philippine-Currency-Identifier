@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     private fun isLicenseExpired(): Boolean {
         // Here you would implement your logic to check if the license has expired.
         // For this example, let's assume the expiration date is hardcoded as January 1, 2023.
-        val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("2024-03-23")
+        val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("2024-03-31")
         val currentDate = Date()
 
         return currentDate.after(expirationDate)
