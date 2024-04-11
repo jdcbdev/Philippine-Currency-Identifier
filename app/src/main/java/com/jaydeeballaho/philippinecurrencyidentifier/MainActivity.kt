@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         // Element variables
         val continueBtn = findViewById<Button>(R.id.btnContinue)
-        val termsMessage = getString(R.string.app_terms_conditions);
+        val termsMessage = getString(R.string.app_instructions);
 
         val speechMessage = "Welcome to Cash Hear - A Philippine Currency Identifier. $termsMessage"
         val uniqueId = "welcoming"
@@ -69,10 +69,10 @@ class MainActivity : AppCompatActivity() {
     private fun isLicenseExpired(): Boolean {
         // Here you would implement your logic to check if the license has expired.
         // For this example, let's assume the expiration date is hardcoded as January 1, 2023.
-        val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("2024-03-31")
+        val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("2024-04-30")
         val currentDate = Date()
 
-        return currentDate.after(expirationDate)
+        return false//currentDate.after(expirationDate)
     }
 
     override fun onStop() {

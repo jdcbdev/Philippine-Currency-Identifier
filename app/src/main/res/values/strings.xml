@@ -3,4 +3,5 @@
     <string name="app_name_2">Cash Hear</string>
     <string name="app_name_3">Cash Hear - Philippine Currency Identifier</string>
     <string name="app_terms_conditions">By tapping CONTINUE, you agree to our Terms of Use and confirm you have read our Privacy Policy.</string>
+    <string name="app_instructions">After tapping CONTINUE, point your devices camera at a currency note or coin then wait for the result. You can also either swipe right to count the identified currency or swipe left to skip it.</string>
 </resources>
